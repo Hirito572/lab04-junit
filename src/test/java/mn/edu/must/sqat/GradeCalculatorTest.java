@@ -3,6 +3,9 @@ package mn.edu.must.sqat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -192,5 +195,59 @@ class GradeCalculatorTest {
                         30.0
                 )
         );
+    }
+        @ParameterizedTest
+    @DisplayName("Оноог үсгэн дүнтэй зөв харьцуулах")
+    @CsvSource({
+        "95, A",
+        "90, A",
+        "89.99, B",
+        "80, B",
+        "70, C",
+        "60, D",
+        "59.99, F",
+        "0, F"
+    })
+    void letterGradeBoundaries(double score, String expected) {
+        // Arrange
+        GradeCalculator calc = new GradeCalculator();
+
+        // Act
+        String grade = calc.letterGrade(score);
+
+        // Assert
+        assertEquals(expected, grade);
+    }
+
+        @ParameterizedTest
+    @DisplayName("Нийт оноог зөв тооцоолох")
+    @CsvSource({
+        "10, 40, 10, 10, 30, 100",
+        "10, 30, 10, 10, 20, 80",
+        "5, 20, 5, 5, 15, 50",
+        "0, 0, 0, 0, 0, 0"
+    })
+    void totalScoreCalculatesCorrectly(
+            double att,
+            double lab,
+            double quiz1,
+            double quiz2,
+            double exam,
+            double expected) {
+
+        // Arrange
+        GradeCalculator calc = new GradeCalculator();
+
+        // Act
+        double total = calc.totalScore(
+                att,
+                lab,
+                quiz1,
+                quiz2,
+                exam
+        );
+
+        // Assert
+        assertEquals(expected, total);
     }
 }
